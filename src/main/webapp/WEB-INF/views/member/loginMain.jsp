@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div style="margin:50px;width: 30%; hight: auto; overflow: hidden;">
-		<form>
+		<form method="post">
 			<fieldset>
 				<legend>Login</legend>
 
@@ -35,4 +35,6 @@
 		</form>
 	</div>
 </body>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 </html>
