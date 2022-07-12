@@ -8,7 +8,8 @@
 	
 	<insert id="insert">
 		INSERT INTO MEMBER_TABLE
-		(MEMBERID)
-		VALUES(#{memberId})
+		(MEMBERID, MEMBERPW, MEMBERNAME, MEMBEREMAIL, MEMBERZIPCODE, MEMBERADDRESS, MEMBERADDRESSDETAIL, MEMBERADDRESSETC, "imgName")
+		VALUES(#{memberId}, #{memberPw}, #{memberName}, #{memberEmail}, #{memberZipcode},
+				 #{memberAddress}, #{memberAddressDetail}, #{memberAddressEtc}, #{imgName})
 	</insert>
 </mapper>

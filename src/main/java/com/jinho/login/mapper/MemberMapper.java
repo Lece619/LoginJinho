@@ -12,5 +12,5 @@ public interface MemberMapper {
 	//조회
 	public List<MemberVO> getList();
 	
-	public void insert(MemberVO memberVO);
+	public int insert(MemberVO memberVO);
 }
