@@ -16,5 +16,20 @@ public class MemberService {
 		
 		return memberMapper.insert(memberVO) == 1 ;
 	}
+
+	public boolean loginCheck(MemberVO memberVO) {
+		
+		return memberMapper.loginCheck(memberVO) == 1;
+	}
+
+	public String idCheck(String memberId) {
+		if(memberMapper.hasId(memberId) == 1) {
+			return "ok";
+		}else {
+			return "false";
+		}
+	}
+	
+	
 	
 }

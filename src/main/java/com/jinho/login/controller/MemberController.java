@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jinho.login.domain.service.MemberService;
@@ -79,5 +81,23 @@ public class MemberController {
 		return "member/loginMain";
 	}
 	
+	@PostMapping("/loginCheck")
+	@ResponseBody
+	public String loginCheck(MemberVO memberVO) {
+		log.info("-==----------------------");
+		log.info(memberVO);
+		if(memberService.loginCheck(memberVO)) {
+			return "ok";
+		}
+		
+		return "false";
+	}
+	
+	@GetMapping("/idCheck")
+	@ResponseBody
+	public String idCheck(String memberId) {
+		
+		return memberService.idCheck(memberId);
+	}
 	
 }

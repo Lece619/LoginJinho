@@ -13,4 +13,8 @@ public interface MemberMapper {
 	public List<MemberVO> getList();
 	
 	public int insert(MemberVO memberVO);
+
+	public int loginCheck(MemberVO memberVO);
+
+	public int hasId(String memberId);
 }

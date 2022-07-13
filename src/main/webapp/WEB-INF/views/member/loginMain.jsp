@@ -13,28 +13,70 @@
 </head>
 <body>
 	<div style="margin:50px;width: 30%; hight: auto; overflow: hidden;">
-		<form method="post">
+		<form name=loginForm method="post">
 			<fieldset>
 				<legend>Login</legend>
 
 				<div class="form-group">
-					<label for="exampleInputEmail1" class="form-label mt-4">ID</label> 
-						<input type="email" class="form-control"
+					<label for="memberId" class="form-label mt-4">ID</label> 
+						<input type="email" class="form-control" id="memberId"
 						name="memberId"
 						placeholder="id"> 
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1" class="form-label mt-4">Password</label>
-					<input type="password" class="form-control"
+					<label for="memberPw" class="form-label mt-4">Password</label>
+					<input type="password" class="form-control" id="memberPw"
 						name="memberPw" placeholder="Password">
 				</div>
 
-				<button type="submit" class="btn btn-primary">Login</button>
+				<input type="button" class="btn btn-primary" onclick='doLogin()' value="Login">
 				<input type="button" class="btn btn-primary" onclick='location.href="insert"'  value="Sign-Up">	
 			</fieldset>
 		</form>
 	</div>
+
 </body>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<script>
+	function doLogin(){
+		var form = document.loginForm;
+		
+		if(!form.memberId.value){
+			form.memberId.focus();
+			Swal.fire({
+				  icon: 'error',
+				  text: '아이디를 입력해주세요!'
+				});
+			return;
+		}
+		if(!form.memberPw.value){
+			form.memberPw.focus();
+			Swal.fire({
+				  icon: 'error',
+				  text: '비밀번호를 입력해주세요!'
+				});
+			return;
+		}
+		
+		$.ajax({
+			url:"loginCheck",
+			type:"POST",
+			data: {"memberId": $('#memberId').val(),"memberPw":$('#memberPw').val()},
+			success: function(result){
+				if(result=="false"){
+				Swal.fire({
+					  icon: 'error',
+					  text: '아이디 비밀번호를 확인해주세요!'
+					});
+				}
+				else{
+					alert("로그인 성공");
+				}
+			}
+		});
+	}	
+
+</script>
 </html>
