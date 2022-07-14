@@ -18,12 +18,11 @@ import com.jinho.login.domain.vo.MemberVO;
 
 import lombok.extern.log4j.Log4j;
 
-/* 0. 이미지 파일 저장 - 다음페이지 출력
- * 1. 해야 할 일 insert 구현 
- * 2. 아이디 중복 버튼 ajax 
- * 3. 비밀번호 확인 
- * 4. 이메일 보내기
- * 5. 
+/*
+ * 1. 이메일 보내기
+ * 2. 로그인 후 페이지 
+ * 3. 수정 페이지 
+ * 4. 탈퇴 버튼 
  * 
  */
 @Controller
