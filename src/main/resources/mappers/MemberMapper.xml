@@ -23,5 +23,8 @@
 		WHERE MEMBERID=#{memberId}
 	</select>
 	
+	<select id="getById" resultType="memberVO">
+		SELECT * FROM Member_Table WHERE MEMBERID=#{memberId}
+	</select>
 	
 </mapper>

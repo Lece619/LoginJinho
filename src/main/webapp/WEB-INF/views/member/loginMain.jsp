@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Login</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/slate/bootstrap.min.css"
 	integrity="sha384-8iuq0iaMHpnH2vSyvZMSIqQuUnQA7QM+f6srIdlgBrTSEyd//AWNMyEaSF2yPzNQ"
@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div style="margin:50px;width: 30%; hight: auto; overflow: hidden;">
-		<form name=loginForm method="post">
+		<form action="memberPage" name=loginForm method="post">
 			<fieldset>
 				<legend>Login</legend>
 
@@ -42,6 +42,7 @@
 <script>
 	function doLogin(){
 		var form = document.loginForm;
+		let loginCheck = false;
 		
 		if(!form.memberId.value){
 			form.memberId.focus();
@@ -66,16 +67,19 @@
 			data: {"memberId": $('#memberId').val(),"memberPw":$('#memberPw').val()},
 			success: function(result){
 				if(result=="false"){
-				Swal.fire({
-					  icon: 'error',
-					  text: '아이디 비밀번호를 확인해주세요!'
-					});
+					Swal.fire({
+						  icon: 'error',
+						  text: '아이디 비밀번호를 확인해주세요!'
+						});
+					loginCheck = false;
 				}
 				else{
-					alert("로그인 성공");
+					loginCheck = true;
+					form.submit();
 				}
 			}
 		});
+		
 	}	
 
 </script>

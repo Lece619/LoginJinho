@@ -2,11 +2,15 @@ package com.jinho.login.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +35,9 @@ public class MemberController {
 	
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	private MailSender mailSender;
 	
 	@RequestMapping(value={"/","/Main"})
 	public String goMain() {
@@ -97,6 +104,53 @@ public class MemberController {
 	public String idCheck(String memberId) {
 		
 		return memberService.idCheck(memberId);
+	}
+	
+	
+	/**
+	 * 인증메일 보내기 
+	 */
+	@GetMapping("/emailConfirm")
+	@ResponseBody
+	public String emailSend(HttpServletRequest request, String memberEmail) {
+		
+		HttpSession session = request.getSession();
+		
+		//랜덤 10자리 인증코드 생성하기
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder();
+		String code;
+		
+		for (int i = 0; i < 10; i++) {
+			if(random.nextBoolean()) {
+				sb.append(random.nextInt(10));
+			}else {
+				sb.append((char)(random.nextInt(26)+97));
+			}
+		}
+		code = sb.toString();
+		session.setAttribute("code", code);
+		
+		/*
+		 * SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		 * simpleMailMessage.setTo(memberEmail);
+		 * simpleMailMessage.setSubject("로그인 인증코드 발송입니다.");
+		 * simpleMailMessage.setText("인증코드는 발송 메일입니다." + "\r\n인증코드는 ["+ code + "] 입니다");
+		 * simpleMailMessage.setFrom("shmmer619@gmail.com");
+		 */
+		//mailSender.send(simpleMailMessage);
+		
+		return code;
+	}
+	
+	
+	@PostMapping("/memberPage")
+	public String goMember(MemberVO memberVO, Model model) {
+		System.out.println("goMember");
+		memberVO = memberService.getMember(memberVO.getMemberId());
+		System.out.println(memberVO);
+		model.addAttribute("memberVO",memberVO);
+		return "member/checkInfo";
 	}
 	
 }

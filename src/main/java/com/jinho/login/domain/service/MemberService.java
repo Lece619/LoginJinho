@@ -29,6 +29,11 @@ public class MemberService {
 			return "false";
 		}
 	}
+
+	public MemberVO getMember(String memberId) {
+		
+		return memberMapper.getById(memberId);
+	}
 	
 	
 	

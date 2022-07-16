@@ -46,10 +46,18 @@
 			</div>
 			
 			<div class="form-group">
-				<label for="EMail" class="form-label mt-4">EMail</label>
+				<label for="memberEmail" class="form-label mt-4">EMail</label>
 				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="Email" id="EMail" name="memberEmail">
-					<button class="btn btn-primary" type="button" id="button-addon2">인증하기</button>
+					<input type="text" class="form-control" placeholder="Email" id="memberEmail" name="memberEmail">
+					<button class="btn btn-primary" type="button" id="button-addon2" onclick="sendEmail()">인증하기</button>
+				</div>
+				<div id=emailDiv style="display: none;">
+				<div  class="input-group mb-3">
+					<input type="text" class="form-control" placeholder="인증번호 입력" id="emailCode" name="emailCode">
+					<button class="btn btn-primary" type="button" id="button-addon2" onclick="confirmEmail()">확인하기</button>
+				</div>
+				<span style="margin-top: 0px">남은 시간 </span>
+				<span id="setTime">3:00</span>
 				</div>
 			</div>
 			
@@ -83,8 +91,10 @@
 			    <input style="margin-top: 5px;"class="form-control" type="file" id="profileImg" name="profileImg">
 		    </div>	
 			
-	
-			<input type="button" value="회원가입" class="btn btn-primary" onclick='join()'>
+			<div style="text-align: center">
+			<input style="width: 45%" type="button" value="회원가입" class="btn btn-primary" onclick='join()'>
+			<input style="width: 45%" type="button" value="취소하기" class="btn btn-primary" onclick="location.href='Main'">
+			</div>
 		</form>
 	</div>
 </body>
@@ -153,6 +163,9 @@
 			alert("프로필을 등록해주세요");
 			return;
 		}
+		
+		alert("회원가입이 완료되었습니다.")
+		form.submit();
 	}
 	
 	//중복확인
@@ -219,6 +232,7 @@
 				idConfirm = false;
 			}else{
 				$('#checkPw').text("");
+				idConfrim = true;
 			}
 		}
 	});
@@ -262,6 +276,51 @@
 			$('#preview').attr("src",e.target.result);
 		};
 	});
+	
+	function sendEmail() {
+		if(confirm("인증 메일 보내시겠습니까?")){
+			
+			
+			 $.ajax({
+				url : "emailConfirm?memberEmail="+form.memberEmail.value,
+				type : "GET",
+				success : function(result){
+					alert("인증번호를 입력해주세요.");
+					$('#emailDiv').show();
+					setTime();
+				}
+			}).fail(function(xhr, status, errorThrown) {
+			       alert("오류발생 이메일 전송을 실패했습니다.");
+			})
+			; 
+		}
+		//icjvrksonujgsvpo
+		
+	}
+	var interval;
+	function setTime(){
+		var time = 180;
+		interval = setInterval(() => {
+			time--;
+			var min = parseInt(time/60);
+			var sec = time%60;
+			$("#setTime").text(min+" : "+sec);
+			
+		}, 1000);
+	}
+	
+	function confirmEmail(){
+		let code = "${sessionScope.code}";
+		alert(code);
+		if($('#emailCode').val() == code){
+			$('#memberEmail').attr("readonly",true);
+			$('#emailDiv').hide();	
+			clearInterval(interval);
+			alert("인증번호가 맞습니다");
+		}else{
+			alert("틀립니다");
+		}
+	}
 	
 </script>
 

@@ -17,4 +17,6 @@ public interface MemberMapper {
 	public int loginCheck(MemberVO memberVO);
 
 	public int hasId(String memberId);
+	
+	public MemberVO getById(String memberId);
 }
