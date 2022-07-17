@@ -19,4 +19,6 @@ public interface MemberMapper {
 	public int hasId(String memberId);
 	
 	public MemberVO getById(String memberId);
+
+	public int update(MemberVO memberVO);
 }

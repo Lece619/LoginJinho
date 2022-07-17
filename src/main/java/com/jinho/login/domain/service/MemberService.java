@@ -34,6 +34,11 @@ public class MemberService {
 		
 		return memberMapper.getById(memberId);
 	}
+
+	public boolean updateMember(MemberVO memberVO) {
+		
+		return memberMapper.update(memberVO) == 1;
+	}
 	
 	
 	

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +85,7 @@ public class MemberController {
 			log.info("등록되었습니다");
 		
 		
-		return "member/loginMain";
+		return "redirect: Main";
 	}
 	
 	@PostMapping("/loginCheck")
@@ -129,16 +130,17 @@ public class MemberController {
 			}
 		}
 		code = sb.toString();
+		
 		session.setAttribute("code", code);
 		
-		/*
-		 * SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-		 * simpleMailMessage.setTo(memberEmail);
-		 * simpleMailMessage.setSubject("로그인 인증코드 발송입니다.");
-		 * simpleMailMessage.setText("인증코드는 발송 메일입니다." + "\r\n인증코드는 ["+ code + "] 입니다");
-		 * simpleMailMessage.setFrom("shmmer619@gmail.com");
-		 */
-		//mailSender.send(simpleMailMessage);
+		
+		  SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		  simpleMailMessage.setTo(memberEmail);
+		  simpleMailMessage.setSubject("로그인 인증코드 발송입니다.");
+		  simpleMailMessage.setText("인증코드는 발송 메일입니다." + "\r\n인증코드는 ["+ code + "] 입니다");
+		  simpleMailMessage.setFrom("shmmer619@gmail.com");
+		 
+		mailSender.send(simpleMailMessage);
 		
 		return code;
 	}
@@ -153,4 +155,63 @@ public class MemberController {
 		return "member/checkInfo";
 	}
 	
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		session.invalidate();
+		
+		return "member/loginMain";
+	}
+	
+	@PostMapping("/changeInfo")
+	public String changeGo(Model model,MemberVO memberVO) {
+		
+		memberVO = memberService.getMember(memberVO.getMemberId());
+		
+		model.addAttribute("member", memberVO);
+		
+		return "member/updateInfo";
+	}
+	
+	@PostMapping("/updateInfo")
+public String updateInfo(MemberVO memberVO,HttpServletRequest request, Model model) {
+		
+		MultipartFile file = memberVO.getProfileImg();
+		if(file.isEmpty()) {
+			System.out.println("이미지파일 그대로 유지");
+		}
+		
+		else {
+			String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload");
+			File saveFolder = new File(saveDir);
+	//		임시저장된 파일
+			
+	//		저장될 이미지의 이름
+			String imgName = file.getOriginalFilename();
+			long time = System.currentTimeMillis() % 10000;
+			imgName = time+"_"+imgName;
+			
+			
+			//폴더가 없다면 생성 하는데 mkdir vs mkdirs 는 상위폴더가 없으면 mkdirs로 해줘야 전부생성
+			if(!saveFolder.exists()) {
+				saveFolder.mkdirs();
+			}
+			//새로운 파일을 생성 지정한 이름
+			File upload = new File(saveFolder,imgName);
+			
+			try {
+				//받아온 파일을 upload파일로 변경(이전)
+				file.transferTo(upload);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}	
+			memberVO.setImgName(upload.getName());
+		}
+		
+		if(memberService.updateMember(memberVO))
+			log.info("등록되었습니다");
+		
+		model.addAttribute("memberVO",memberVO);
+		return "member/checkInfo";	
+	}
 }

@@ -27,4 +27,10 @@
 		SELECT * FROM Member_Table WHERE MEMBERID=#{memberId}
 	</select>
 	
+	<update id="update">
+		UPDATE MEMBER_TABLE
+		SET MEMBERPW= #{memberPw}, MEMBERZIPCODE=#{memberZipcode}, MEMBERADDRESS=#{memberAddress}, MEMBERADDRESSDETAIL=#{memberAddressDetail}, MEMBERADDRESSETC=#{memberAddressEtc}, "imgName"= #{imgName} 
+		WHERE MEMBERID= #{memberId}
+		
+	</update>
 </mapper>

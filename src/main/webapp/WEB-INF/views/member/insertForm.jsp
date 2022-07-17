@@ -152,6 +152,7 @@
 
 	let idConfirm = false;
 	var form = document.joinForm;
+	let code = "";
 	
 	//form submit 
 	function join(){
@@ -232,7 +233,7 @@
 				idConfirm = false;
 			}else{
 				$('#checkPw').text("");
-				idConfrim = true;
+				idConfirm = true;
 			}
 		}
 	});
@@ -278,6 +279,7 @@
 	});
 	
 	function sendEmail() {
+		
 		if(confirm("인증 메일 보내시겠습니까?")){
 			
 			
@@ -285,7 +287,8 @@
 				url : "emailConfirm?memberEmail="+form.memberEmail.value,
 				type : "GET",
 				success : function(result){
-					alert("인증번호를 입력해주세요.");
+					code = result;
+					alert("인증코드를 입력해주세요.");
 					$('#emailDiv').show();
 					setTime();
 				}
@@ -310,7 +313,6 @@
 	}
 	
 	function confirmEmail(){
-		let code = "${sessionScope.code}";
 		alert(code);
 		if($('#emailCode').val() == code){
 			$('#memberEmail').attr("readonly",true);

@@ -39,12 +39,47 @@
 	  <h5 style="text-align: left" class="card-title">${memberVO.memberAddress} ${memberVO.memberAddressDetail} ${memberVO.memberAddressEtc}</h5>	
 	  </div>
 	</div>			
-	<div style="text-align: center;">
-	<button style="width:45%;" type="button" class="btn btn-light ">Logout</button>
-	<button style="width:45%;" type="button" class="btn btn-light">ChangInfo</button>
+	<div style="text-align: center; margin-bottom: 30px">
+	<button style="width:45%;" type="button" class="btn btn-light " onclick="location.href='logout'">Logout</button>
+	<button style="width:45%;" type="button" class="btn btn-light" onclick='changeInfo()'>ChangeInfo</button>
 	</div>		
 		
 	</div>
 </body>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+	async function changeInfo(){
+			const {value:password} = await Swal.fire({
+				  title: 'Enter your password',
+				  input: 'password',
+				  inputLabel: 'Password',
+				  inputPlaceholder: 'Enter your password',
+				  inputAttributes: {
+				    maxlength: 15,	
+				    autocapitalize: 'off',
+				    autocorrect: 'off'
+				  }
+			})
+			
+			if (password) {
+			  if(pasword='${memberVO.memberPw}'){
+				  var form = document.createElement("form");
+				  form.setAttribute("action","changeInfo");
+				  form.setAttribute("method","post");
+				  
+				  var memberId = document.createElement("input");
+				  memberId.setAttribute("type","hidden");
+				  memberId.setAttribute("name","memberId");
+				  memberId.setAttribute("value","${memberVO.memberId}");
+				  
+				  form.appendChild(memberId);
+				  document.body.appendChild(form);
+				  form.submit();
+			  }
+			}
+		
+	}
+
+</script>
 </html>
